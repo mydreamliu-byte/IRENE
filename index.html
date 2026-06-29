@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青熙服務禮儀初階測驗</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  :root {
+    --ink:       #1a1a2e;
+    --gold:      #c9a84c;
+    --gold-lt:   #f0e0b0;
+    --ivory:     #faf8f3;
+    --stone:     #e8e2d6;
+    --slate:     #6b6560;
+    --correct:   #2d7a4f;
+    --wrong:     #c0392b;
+    --correct-bg:#eaf6ef;
+    --wrong-bg:  #fdecea;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--ivory);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 2.8rem 2rem 2.2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(201,168,76,.06) 40px,
+      rgba(201,168,76,.06) 41px
+    );
+  }
+  .header-eyebrow {
+    font-size: .72rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .8rem;
+    position: relative;
+  }
+  header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: .08em;
+    position: relative;
+  }
+  .gold-line {
+    width: 56px; height: 2px;
+    background: var(--gold);
+    margin: 1rem auto .6rem;
+    position: relative;
+  }
+  header p {
+    font-size: .9rem;
+    color: rgba(255,255,255,.65);
+    position: relative;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-wrap {
+    background: var(--stone);
+    height: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  #progress-bar {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width .4s ease;
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 1.2rem 4rem;
+  }
+
+  .section-label {
+    font-family: 'Noto Serif TC', serif;
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold-lt);
+    padding-bottom: .5rem;
+    margin: 2.5rem 0 1.6rem;
+  }
+
+  /* ── NAME INPUT ── */
+  #name-section {
+    background: #fff;
+    border: 1px solid var(--stone);
+    border-radius: 10px;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  #name-section label {
+    font-weight: 500;
+    white-space: nowrap;
+    font-size: .95rem;
+  }
+  #name-input {
+    border: none;
+    border-bottom: 2px solid var(--stone);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: .3rem .5rem;
+    background: transparent;
+    color: var(--ink);
+    flex: 1;
+    min-width: 160px;
+    transition: border-color .2s;
+    outline: none;
+  }
+  #name-input:focus { border-color: var(--gold); }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--stone);
+    border-radius: 12px;
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.4rem;
+    transition: box-shadow .2s;
+  }
+  .q-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.06); }
+
+  .q-number {
+    font-size: .72rem;
+    letter-spacing: .18em;
+    color: var(--slate);
+    margin-bottom: .5rem;
+  }
+  .q-text {
+    font-size: 1.02rem;
+    line-height: 1.75;
+    font-weight: 500;
+    margin-bottom: 1.1rem;
+  }
+
+  /* MCQ options */
+  .options { display: grid; gap: .55rem; }
+  .opt-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    padding: .75rem 1rem;
+    border: 1.5px solid var(--stone);
+    border-radius: 8px;
+    background: var(--ivory);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    font-size: .92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    transition: border-color .15s, background .15s;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--gold);
+    background: #fffdf5;
+  }
+  .opt-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--stone);
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--slate);
+    flex-shrink: 0;
+    transition: background .15s, color .15s;
+  }
+  .opt-btn.selected .opt-key {
+    background: var(--ink);
+    color: #fff;
+  }
+  .opt-btn.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .opt-btn.correct .opt-key { background: var(--correct); color: #fff; }
+  .opt-btn.wrong   { border-color: var(--wrong); background: var(--wrong-bg); }
+  .opt-btn.wrong   .opt-key { background: var(--wrong); color: #fff; }
+  .opt-btn:disabled { cursor: default; }
+
+  /* Short answer */
+  .short-ans {
+    width: 100%;
+    border: 1.5px solid var(--stone);
+    border-radius: 8px;
+    padding: .8rem 1rem;
+    font-family: inherit;
+    font-size: .93rem;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 90px;
+    background: var(--ivory);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .short-ans:focus { border-color: var(--gold); }
+
+  /* Feedback box after grading */
+  .feedback-box {
+    display: none;
+    margin-top: 1rem;
+    padding: .9rem 1rem;
+    border-radius: 8px;
+    font-size: .88rem;
+    line-height: 1.7;
+  }
+  .feedback-box.show { display: block; }
+  .feedback-box.fb-correct { background: var(--correct-bg); border-left: 3px solid var(--correct); color: #1d5e3a; }
+  .feedback-box.fb-wrong   { background: var(--wrong-bg);   border-left: 3px solid var(--wrong);   color: #8b1a10; }
+  .feedback-box.fb-ref     { background: #f0f4ff; border-left: 3px solid #5b7fd4; color: #1a2e5a; }
+
+  /* Points badge */
+  .q-pts {
+    font-size: .75rem;
+    color: var(--slate);
+    float: right;
+    margin-top: .2rem;
+  }
+
+  /* ── SUBMIT / RESULT ── */
+  #submit-btn {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 2.5rem auto 0;
+    padding: 1rem 2rem;
+    background: var(--ink);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  #submit-btn:hover { background: #2e2e50; }
+  #submit-btn:active { transform: scale(.98); }
+  #submit-btn:disabled { background: var(--slate); cursor: default; }
+
+  #result-card {
+    display: none;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 14px;
+    padding: 2.4rem 2rem;
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+  #result-card.show { display: block; }
+  .result-score {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .result-denom { font-size: 1.2rem; color: rgba(255,255,255,.55); margin-bottom: .3rem; }
+  .result-grade {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: .6rem 0 1.2rem;
+  }
+  .result-breakdown {
+    font-size: .85rem;
+    color: rgba(255,255,255,.65);
+    line-height: 1.9;
+  }
+  #reset-btn {
+    display: inline-block;
+    margin-top: 1.6rem;
+    padding: .6rem 1.8rem;
+    border: 1.5px solid var(--gold);
+    border-radius: 50px;
+    color: var(--gold);
+    background: transparent;
+    font-family: inherit;
+    font-size: .9rem;
+    cursor: pointer;
+    letter-spacing: .06em;
+    transition: background .2s, color .2s;
+  }
+  #reset-btn:hover { background: var(--gold); color: var(--ink); }
+
+  /* ── PRINT ── */
+  @media print {
+    header, #progress-wrap { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .opt-btn, .short-ans { page-break-inside: avoid; }
+    #submit-btn, #reset-btn { display: none; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 520px) {
+    .q-card { padding: 1.2rem 1rem; }
+    header { padding: 2rem 1rem 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">青熙禮儀培訓系統</div>
+  <h1>服務禮儀初階測驗卷</h1>
+  <div class="gold-line"></div>
+  <p>共 11 題・選擇題 64 分・簡答題 36 分・滿分 100 分</p>
+</header>
+
+<div id="progress-wrap"><div id="progress-bar"></div></div>
+
+<main>
+
+  <!-- 姓名 -->
+  <div id="name-section">
+    <label for="name-input">📋 姓名</label>
+    <input id="name-input" type="text" placeholder="請輸入您的姓名…" autocomplete="off">
+  </div>
+
+  <!-- 第一部分：選擇題 -->
+  <div class="section-label">第一部分・選擇題（每題 8 分，共 8 題，計 64 分）</div>
+
+  <div id="mcq-container"></div>
+
+  <!-- 第二部分：簡答題 -->
+  <div class="section-label">第二部分・簡答題（每題 12 分，共 3 題，計 36 分）</div>
+
+  <div id="saq-container"></div>
+
+  <button id="submit-btn" onclick="gradeAll()">交卷評分</button>
+
+  <div id="result-card">
+    <div class="result-denom">得分</div>
+    <div class="result-score" id="res-score">0</div>
+    <div style="font-size:.95rem;color:rgba(255,255,255,.5);margin:.3rem 0 .5rem">/ 100 分</div>
+    <div class="result-grade" id="res-grade"></div>
+    <div class="result-breakdown" id="res-breakdown"></div>
+    <button id="reset-btn" onclick="resetAll()">重新作答</button>
+  </div>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════
+   題目資料
+═══════════════════════════════════════════ */
+const MCQ = [
+  {
+    id: 'q1', pts: 8,
+    text: '根據「55-38-7 形象定律」，決定個人第一形象最大的因素（佔比 55%）是下列哪一項？',
+    opts: ['說話內容與文字', '聲音表情與語調', '肢體動作與外貌儀容', '手勢的靈活使用'],
+    ans: 'C'
+  },
+  {
+    id: 'q2', pts: 8,
+    text: '關於商務禮儀中的標準「站姿」，下列描述何者正確？',
+    opts: ['雙腳應平行分開與肩同寬', '腳跟併攏，腳尖之間自然呈 45 度角', '膝蓋應稍微彎曲以保持放鬆', '視線應向下看地板以示謙卑'],
+    ans: 'B'
+  },
+  {
+    id: 'q3', pts: 8,
+    text: '在商務禮儀的「八字訣」中，關於行走與座位安排的優先順序為何？',
+    opts: ['前卑後尊，左大右小', '前尊後卑，右大左小', '前卑後尊，右大左小', '前尊後卑，左大右小'],
+    ans: 'B'
+  },
+  {
+    id: 'q4', pts: 8,
+    text: '進行接待引導時，引導者應站在來賓的哪個位置最為合宜？',
+    opts: ['正前方兩公尺處', '左後方一公尺處', '右前方一公尺處', '並排貼身行走'],
+    ans: 'C'
+  },
+  {
+    id: 'q5', pts: 8,
+    text: '在商務禮儀中，若要互相介紹不同地位的商務人士，正確的介紹順序原則為何？',
+    opts: ['將地位低者介紹給地位高者', '將地位高者介紹給地位低者', '先介紹與自己關係較近的一方', '依據雙方的年齡大小來決定'],
+    ans: 'A'
+  },
+  {
+    id: 'q6', pts: 8,
+    text: '引導客戶在空間移動時，服務人員應採取的「黃金角度」位置為何？',
+    opts: ['走在客戶左前方，身體微向後側', '走在客戶正後方，保持安全距離', '走在客戶右前方，身體微向後側', '走在客戶正前方，快速領路'],
+    ans: 'C'
+  },
+  {
+    id: 'q7', pts: 8,
+    text: '進行名片交換時，關於「3 秒黃金期」的互動敘述，下列何者正確？',
+    opts: [
+      '遞交後為了不尷尬，應立刻與旁人交談',
+      '遞交後應迅速將名片收納至公事包',
+      '遞交後應立即低頭，避免與對方眼神接觸',
+      '遞交後目光應鎖定對方，並報上自己的姓名與職稱'
+    ],
+    ans: 'D'
+  },
+  {
+    id: 'q8', pts: 8,
+    text: '在「空間禮位」的原則下，當與重要賓客一同進入電梯時，最尊貴的位置通常位於何處？',
+    opts: ['電梯門按鈕旁邊', '電梯門正前方側', '電梯內操控盤對角線的最內側', '電梯最內側中心'],
+    ans: 'C'
+  }
+];
+
+const SAQ = [
+  {
+    id: 'sq1', pts: 12,
+    text: '請簡述質感說話技巧中，關於「四目相交」的目的與效果。',
+    ref: '參考答案：建立信任感、展現專注與誠意、凝聚對方注意力。與對方說話時保持適度眼神接觸，讓對方感受到被重視，有助於拉近雙方距離並提升溝通品質。'
+  },
+  {
+    id: 'sq2', pts: 12,
+    text: '女士在進行商務「坐姿」展示時，最核心的儀態要求與雙腿擺放原則是什麼？',
+    ref: '參考答案：坐滿椅子的 2/3、挺胸收腹、雙膝併攏（可微斜放）。腰背挺直不靠椅背，雙腿不交叉翹腳，保持端莊優雅的形象。'
+  },
+  {
+    id: 'sq3', pts: 12,
+    text: '接待禮儀中提到「用別人喜歡的方式來達到社交的目的」。請問在引導指路時，應使用什麼樣的正確手勢？且嚴禁使用哪兩個部位來指引？',
+    ref: '參考答案：應使用「五指併攏、掌心向上」的柔和手勢；嚴禁使用「單指（食指）」或「下巴」來指引方向。'
+  }
+];
+
+/* ═══════════════════════════════════════════
+   渲染題目
+═══════════════════════════════════════════ */
+const keys = ['A','B','C','D'];
+
+function renderMCQ() {
+  const wrap = document.getElementById('mcq-container');
+  MCQ.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+    card.innerHTML = `
+      <div class="q-number">第 ${qi + 1} 題</div>
+      <span class="q-pts">${q.pts} 分</span>
+      <div class="q-text">${q.text}</div>
+      <div class="options" id="opts-${q.id}">
+        ${q.opts.map((o, i) => `
+          <button class="opt-btn" id="opt-${q.id}-${keys[i]}"
+            onclick="selectOpt('${q.id}','${keys[i]}')" data-key="${keys[i]}">
+            <span class="opt-key">${keys[i]}</span>
+            <span>${o}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback-box" id="fb-${q.id}"></div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function renderSAQ() {
+  const wrap = document.getElementById('saq-container');
+  SAQ.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card-' + q.id;
+    card.innerHTML = `
+      <div class="q-number">簡答第 ${qi + 1} 題</div>
+      <span class="q-pts">${q.pts} 分</span>
+      <div class="q-text">${q.text}</div>
+      <textarea class="short-ans" id="${q.id}" rows="4"
+        placeholder="請在此輸入您的答案…"
+        oninput="updateProgress()"></textarea>
+      <div class="feedback-box" id="fb-${q.id}"></div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   互動邏輯
+═══════════════════════════════════════════ */
+const selected = {};
+
+function selectOpt(qid, key) {
+  if (selected[qid + '_locked']) return;
+  selected[qid] = key;
+  document.querySelectorAll(`#opts-${qid} .opt-btn`).forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.key === key);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const totalQ = MCQ.length + SAQ.length;
+  let answered = 0;
+  MCQ.forEach(q => { if (selected[q.id]) answered++; });
+  SAQ.forEach(q => { if (document.getElementById(q.id)?.value.trim()) answered++; });
+  document.getElementById('progress-bar').style.width = (answered / totalQ * 100) + '%';
+}
+
+/* ═══════════════════════════════════════════
+   評分
+═══════════════════════════════════════════ */
+function gradeAll() {
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) {
+    document.getElementById('name-input').focus();
+    document.getElementById('name-input').style.borderColor = 'var(--wrong)';
+    alert('請先填寫您的姓名。');
+    return;
+  }
+
+  let mcqScore = 0, saqNote = [];
+
+  // 選擇題評分
+  MCQ.forEach(q => {
+    const userAns = selected[q.id];
+    const fb = document.getElementById('fb-' + q.id);
+    document.querySelectorAll(`#opts-${q.id} .opt-btn`).forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove('selected');
+    });
+    selected[q.id + '_locked'] = true;
+
+    if (!userAns) {
+      // 未作答
+      const correct = document.getElementById(`opt-${q.id}-${q.ans}`);
+      correct.classList.add('correct');
+      fb.className = 'feedback-box fb-wrong show';
+      fb.innerHTML = `⚠ 未作答。正確答案為 <strong>(${q.ans})</strong>。`;
+    } else if (userAns === q.ans) {
+      mcqScore += q.pts;
+      document.getElementById(`opt-${q.id}-${userAns}`).classList.add('correct');
+      fb.className = 'feedback-box fb-correct show';
+      fb.innerHTML = `✔ 答對了！+${q.pts} 分`;
+    } else {
+      document.getElementById(`opt-${q.id}-${userAns}`).classList.add('wrong');
+      document.getElementById(`opt-${q.id}-${q.ans}`).classList.add('correct');
+      fb.className = 'feedback-box fb-wrong show';
+      fb.innerHTML = `✘ 答錯了。正確答案為 <strong>(${q.ans})</strong>，您選了 (${userAns})。`;
+    }
+  });
+
+  // 簡答題：顯示參考答案，人工給分估算（此版本給 5 分基本分）
+  let saqScore = 0;
+  SAQ.forEach(q => {
+    const ans = document.getElementById(q.id)?.value.trim() || '';
+    const fb = document.getElementById('fb-' + q.id);
+    document.getElementById(q.id).disabled = true;
+
+    if (!ans) {
+      fb.className = 'feedback-box fb-wrong show';
+      fb.innerHTML = `⚠ 未作答。<br><em>${q.ref}</em>`;
+      saqNote.push(`簡答題未作答`);
+    } else {
+      const partial = Math.round(q.pts * 0.5); // 有作答給一半基本分
+      saqScore += partial;
+      fb.className = 'feedback-box fb-ref show';
+      fb.innerHTML = `📝 已記錄您的回答。簡答題由主管人員複閱後給分（暫計 ${partial} 分）。<br><br><em>${q.ref}</em>`;
+    }
+  });
+
+  const total = mcqScore + saqScore;
+  const grade =
+    total >= 90 ? '🏆 優秀 Excellent' :
+    total >= 80 ? '🥇 良好 Good' :
+    total >= 70 ? '🥈 及格 Pass' :
+    total >= 60 ? '🥉 尚可 Fair' : '📖 需加強 Needs Review';
+
+  document.getElementById('res-score').textContent = total;
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-breakdown').innerHTML =
+    `選擇題得分：${mcqScore} / 64 分<br>` +
+    `簡答題暫計：${saqScore} / 36 分（待人工複閱）<br><br>` +
+    `應試者：${name}`;
+
+  document.getElementById('result-card').classList.add('show');
+  document.getElementById('submit-btn').disabled = true;
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+/* ═══════════════════════════════════════════
+   重設
+═══════════════════════════════════════════ */
+function resetAll() {
+  Object.keys(selected).forEach(k => delete selected[k]);
+  document.getElementById('mcq-container').innerHTML = '';
+  document.getElementById('saq-container').innerHTML = '';
+  document.getElementById('result-card').classList.remove('show');
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('progress-bar').style.width = '0%';
+  document.getElementById('name-input').value = '';
+  document.getElementById('name-input').style.borderColor = '';
+  renderMCQ();
+  renderSAQ();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── 初始化 ── */
+renderMCQ();
+renderSAQ();
+</script>
+</body>
+</html>
